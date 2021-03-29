@@ -29,13 +29,20 @@ start.addEventListener('click', () => {
     pause.style.visibility = 'visible';
     start.style.visibility = 'hidden';
 
-    function startInterval() {
-        startTimer = setInterval(function() {
-            timer();
-            checkFieldValue();
-        }, 1000);
+    if (hours.value == 0 && minutes.value == 0 && seconds.value == 0) {
+        pause.style.visibility = 'hidden';
+        resume.style.visibility = 'hidden';
+        start.style.visibility = 'visible';
+    } else {
+        function startInterval() {
+            startTimer = setInterval(function () {
+                timer();
+                checkFieldValue();
+            }, 1000);
+        }
     }
     startInterval();
+    return;
 });
 
 
@@ -44,13 +51,6 @@ pause.addEventListener('click', () => {
     pause.style.visibility = 'hidden';
     checkFieldValue();
     stopInterval();
-
-    //resume doesn't work in the end
-    if (hours.value == 0 && minutes.value == 0 && seconds.value == 0) {
-        pause.style.visibility = 'hidden';
-        resume.style.visibility = 'hidden';
-        start.style.visibility = 'visible';
-    }
     return;
 });
 
@@ -60,7 +60,7 @@ resume.addEventListener('click', () => {
     pause.style.visibility = 'visible';
     checkFieldValue();
 
-    startTimer = setInterval(function() {
+    startTimer = setInterval(function () {
         timer();
     }, 1000);
     return;
@@ -102,17 +102,17 @@ function timer() {
 };
 
 
-function checkFieldValue(){
-    if(hours.value >= 101 || minutes.value >= 60 || seconds.value >= 60){
-        mypopup();
-        hours.value = 0;
-        minutes.value = 0;
+function checkFieldValue() {
+    if (hours.value > 100 || minutes.value > 59 || seconds.value > 59) {
         seconds.value = 0;
-    }else if(hours.value == ""){
-        hours.value = 0;
-    }else if(minutes.value == ""){
         minutes.value = 0;
-    }else if(seconds.value == ""){
+        hours.value = 0;
+        mypopup();
+    } else if (hours.value == "") {
+        hours.value = 0;
+    } else if (minutes.value == "") {
+        minutes.value = 0;
+    } else if (seconds.value == "") {
         seconds.value = 0;
     }
     return;
@@ -172,30 +172,35 @@ let mypopup = () => {
 
     let closeBTN = document.createElement("span");
     closeBTN.setAttribute("class", "closebtn");
+    closeBTN.innerHTML = "<span class='closebtn'>&times;</span>";
+    //close alert button action!
+    closeBTN.addEventListener('click', () => {
+        modalOverlayError.classList.remove('show-error');
+    });
     document.body.appendChild(closeBTN);
     modalMessage.appendChild(closeBTN);
 
     let errorMessage = document.createElement("p");
     errorMessage.setAttribute("id", "error-message");
-    errorMessage.innerHTML = "Invalid! Please enter a valid value";
+    errorMessage.innerHTML = "Error! Please enter a valid value";
     document.body.appendChild(errorMessage);
     modalMessage.appendChild(errorMessage);
 
     modalOverlayError.classList.add('show-error');
 
-    setTimeout(function() {
+    setTimeout(function () {
         modalOverlayError.classList.remove('show-error');
-    }, 4000);
+    }, 8000);
 };
 
 
 //will never be able to leave the number field empty.
 document.defaultView.addEventListener('click', () => {
-    if (hours.value == "") {
+    if (hours.value == "" || hours.value == 00 || hours.value == 000) {
         hours.value = 0;
-    }else if(minutes.value == ""){
+    } if (minutes.value == "" || minutes.value == 00) {
         minutes.value = 0;
-    }else if(seconds.value == ""){
+    } if (seconds.value == "" || seconds.value == 00) {
         seconds.value = 0;
     }
     return;
@@ -204,14 +209,13 @@ document.defaultView.addEventListener('click', () => {
 
 //press tab = auto field when empty
 document.getElementById("container").addEventListener('keydown', (event) => {
-    if(event.keyCode == 9 && hours.value == ""){
+    if (event.keyCode == 9 && hours.value == "" || event.keyCode == 9 && hours.value == 00 || event.keyCode == 9 && hours.value == 000) {
         hours.value = 0;
-    }else if(event.keyCode == 9 && minutes.value == ""){
+    } if (event.keyCode == 9 && minutes.value == "" || event.keyCode == 9 && minutes.value == 00) {
         minutes.value = 0;
-    }else if(event.keyCode == 9 && seconds.value == ""){
+    } if (event.keyCode == 9 && seconds.value == "" || event.keyCode == 9 && seconds.value == 00) {
         seconds.value = 0;
     }
-    return;
 });
 
 
@@ -225,7 +229,7 @@ function checkFieldLength(input) {
 
 
 //Hundred is the limit
-function hourFieldLength(input){
+function hourFieldLength(input) {
     if (input.value.length > 3) {
         input.value = input.value.slice(0, 3);
     }
