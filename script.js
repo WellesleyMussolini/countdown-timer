@@ -127,11 +127,11 @@ function checkFieldValue() {
         minutes.value = 0;
         hours.value = 0;
         mypopup();
-    }else if(hours.value == ""){
+    } else if (hours.value == "") {
         hours.value = 0;
-    }else if(minutes.value == ""){
+    } else if (minutes.value == "") {
         minutes.value = 0;
-    }else if(seconds.value == ""){
+    } else if (seconds.value == "") {
         seconds.value = 0;
     }
     return;
@@ -175,41 +175,69 @@ function validateNumber(evt) {
 
 //Alert
 let mypopup = () => {
+
     let modalOverlayError = document.createElement("div");
     modalOverlayError.setAttribute("class", "modal-overlay-error");
     document.body.appendChild(modalOverlayError);
 
-    let modalError = document.createElement("div");
-    modalError.setAttribute("class", "modal-error");
-    document.body.appendChild(modalError);
-    modalOverlayError.appendChild(modalError);
+    let wrapper = document.createElement("div");
+    wrapper.setAttribute("class", "wrapper");
+    document.body.appendChild(wrapper);
+    modalOverlayError.appendChild(wrapper);
 
-    let modalMessage = document.createElement("div");
-    modalMessage.setAttribute("class", "modal-message");
-    document.body.appendChild(modalMessage);
-    modalError.appendChild(modalMessage);
+    let toast = document.createElement("div");
+    toast.setAttribute("class", "toast");
+    document.body.appendChild(toast);
+    wrapper.appendChild(toast);
 
-    let closeBTN = document.createElement("span");
-    closeBTN.setAttribute("class", "closebtn");
-    closeBTN.innerHTML = "<span class='closebtn'>&times;</span>";
-    //close alert button action!
-    closeBTN.addEventListener('click', () => {
-        modalOverlayError.classList.remove('show-error');
-    });
+    let content = document.createElement("div");
+    content.setAttribute("class", "content");
+    document.body.appendChild(content);
+    toast.appendChild(content);
+
+    let details = document.createElement("div");
+    details.setAttribute("class", "details");
+    details.innerHTML = "<span>CRITICAL ERROR!</span> <p>Enter only valid values!</p>"
+    document.body.appendChild(details);
+    content.appendChild(details);
+
+    let closeBTN = document.createElement("div");
+    closeBTN.setAttribute("class", "close-icon");
+    closeBTN.innerHTML = "<i class='uil uil-times'></i>";
     document.body.appendChild(closeBTN);
-    modalMessage.appendChild(closeBTN);
+    toast.appendChild(closeBTN);
 
-    let errorMessage = document.createElement("p");
-    errorMessage.setAttribute("id", "error-message");
-    errorMessage.innerHTML = "Error! Please enter a valid value";
-    document.body.appendChild(errorMessage);
-    modalMessage.appendChild(errorMessage);
+    closeBTN.addEventListener('click', () => {
+        wrapper.classList.add('hide');
+        setInterval(function () {
+            modalOverlayError.classList.remove('show-error');
+        }, 900);
+    });
+
+    //close alert on ESC KeyBoard
+    window.document.onkeydown = function (e) {
+        if (!e) e = event;
+        if (e.keyCode == 27)
+            wrapper.classList.add('hide');
+        setInterval(function () {
+            modalOverlayError.classList.remove('show-error');
+        }, 900);
+    }
 
     modalOverlayError.classList.add('show-error');
 
-    setTimeout(function () {
+    setInterval(function () {
         modalOverlayError.classList.remove('show-error');
-    }, 8000);
+    }, 5900);
+    setInterval(function () {
+        wrapper.classList.add('hide');
+    }, 5000);
+
+
+
+
+
+    return;
 };
 
 
