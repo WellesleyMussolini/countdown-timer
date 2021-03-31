@@ -27,7 +27,9 @@ var startTimer = null;
 
 start.addEventListener('click', () => {
     pause.style.visibility = 'visible';
+    resume.style.visibility = 'hidden';
     start.style.visibility = 'hidden';
+    checkFieldValue();
 
     if (hours.value == 0 && minutes.value == 0 && seconds.value == 0) {
         pause.style.visibility = 'hidden';
@@ -47,22 +49,37 @@ start.addEventListener('click', () => {
 
 
 pause.addEventListener('click', () => {
-    resume.style.visibility = 'visible';
+    start.style.visibility = 'hidden';
     pause.style.visibility = 'hidden';
+    resume.style.visibility = 'visible';
     checkFieldValue();
     stopInterval();
+
+    if (hours.value == 0 && minutes.value == 0 && seconds.value == 0) {
+        pause.style.visibility = 'hidden';
+        resume.style.visibility = 'hidden';
+        start.style.visibility = 'visible';
+    };
     return;
 });
 
 
 resume.addEventListener('click', () => {
+    start.style.visibility = 'hidden';
     resume.style.visibility = 'hidden';
     pause.style.visibility = 'visible';
     checkFieldValue();
 
-    startTimer = setInterval(function () {
-        timer();
-    }, 1000);
+    if (hours.value == 0 && minutes.value == 0 && seconds.value == 0) {
+        pause.style.visibility = 'hidden';
+        resume.style.visibility = 'hidden';
+        start.style.visibility = 'visible';
+    } else {
+        startTimer = setInterval(function () {
+            timer();
+            checkFieldValue();
+        }, 1000);
+    };
     return;
 });
 
@@ -75,7 +92,9 @@ reset.addEventListener('click', () => {
     hours.value = 0;
     minutes.value = 0;
     seconds.value = 0;
-    stopInterval()
+    stopInterval();
+
+    return;
 });
 
 
@@ -108,11 +127,11 @@ function checkFieldValue() {
         minutes.value = 0;
         hours.value = 0;
         mypopup();
-    } else if (hours.value == "") {
+    }else if(hours.value == ""){
         hours.value = 0;
-    } else if (minutes.value == "") {
+    }else if(minutes.value == ""){
         minutes.value = 0;
-    } else if (seconds.value == "") {
+    }else if(seconds.value == ""){
         seconds.value = 0;
     }
     return;
@@ -202,7 +221,7 @@ document.defaultView.addEventListener('click', () => {
         minutes.value = 0;
     } if (seconds.value == "" || seconds.value == 00) {
         seconds.value = 0;
-    }
+    };
     return;
 });
 
@@ -215,7 +234,8 @@ document.getElementById("container").addEventListener('keydown', (event) => {
         minutes.value = 0;
     } if (event.keyCode == 9 && seconds.value == "" || event.keyCode == 9 && seconds.value == 00) {
         seconds.value = 0;
-    }
+    };
+    return;
 });
 
 
